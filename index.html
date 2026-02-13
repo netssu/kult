@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KULT: Divindade Perdida — Ficha de Personagem</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cinzel+Decorative:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg-deep: #0a0a0a;
+  --bg-dark: #111111;
+  --bg-card: #161616;
+  --bg-card-hover: #1a1a1a;
+  --bg-input: #0d0d0d;
+  --border: #2a2a2a;
+  --border-accent: #3a3028;
+  --gold: #c9a84c;
+  --gold-dim: #8a7233;
+  --gold-bright: #e6c35c;
+  --gold-glow: rgba(201, 168, 76, 0.15);
+  --red: #8b2020;
+  --red-bright: #c0392b;
+  --red-glow: rgba(192, 57, 43, 0.2);
+  --text: #d4d0c8;
+  --text-dim: #7a756b;
+  --text-bright: #ebe7df;
+  --text-label: #9a9386;
+  --font-display: 'Cinzel Decorative', serif;
+  --font-heading: 'Cinzel', serif;
+  --font-body: 'Cormorant Garamond', serif;
+  --font-input: 'EB Garamond', serif;
+}
+
+html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--gold-dim) var(--bg-deep);
+}
+
+body {
+  background: var(--bg-deep);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 16px;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Noise texture overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* Header */
+.header {
+  text-align: center;
+  padding: 40px 20px 20px;
+  position: relative;
+}
+
+.header::after {
+  content: '';
+  display: block;
+  width: 300px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+  margin: 20px auto 0;
+}
+
+.header h1 {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 5vw, 3rem);
+  color: var(--gold);
+  letter-spacing: 8px;
+  text-transform: uppercase;
+  text-shadow: 0 0 40px rgba(201,168,76,0.3), 0 0 80px rgba(201,168,76,0.1);
+}
+
+.header .subtitle {
+  font-family: var(--font-heading);
+  font-size: clamp(0.7rem, 2vw, 0.95rem);
+  color: var(--text-dim);
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  margin-top: 6px;
+}
+
+/* Toolbar */
+.toolbar {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  padding: 16px 20px;
+  flex-wrap: wrap;
+}
+
+.toolbar button {
+  font-family: var(--font-heading);
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 8px 20px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.toolbar button:hover {
+  border-color: var(--gold-dim);
+  color: var(--gold);
+  background: rgba(201,168,76,0.05);
+}
+
+.toolbar button.danger:hover {
+  border-color: var(--red);
+  color: var(--red-bright);
+  background: rgba(192,57,43,0.05);
+}
+
+/* Main layout */
+.sheet {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 10px 20px 60px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+}
+
+/* Section cards */
+.section {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: 20px;
+  position: relative;
+  transition: border-color 0.3s ease;
+}
+
+.section:hover {
+  border-color: var(--border-accent);
+}
+
+.section-title {
+  font-family: var(--font-heading);
+  font-size: 0.72rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.section-title::before,
+.section-title::after {
+  content: '◆';
+  font-size: 0.45rem;
+  color: var(--gold-dim);
+}
+
+/* Input styles */
+.field-group {
+  margin-bottom: 12px;
+}
+
+.field-label {
+  font-family: var(--font-heading);
+  font-size: 0.6rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-label);
+  margin-bottom: 4px;
+  display: block;
+}
+
+.field-input {
+  width: 100%;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  color: var(--text-bright);
+  font-family: var(--font-input);
+  font-size: 1rem;
+  padding: 8px 12px;
+  transition: border-color 0.3s ease;
+  outline: none;
+}
+
+.field-input:focus {
+  border-color: var(--gold-dim);
+  box-shadow: 0 0 0 1px rgba(201,168,76,0.1);
+}
+
+textarea.field-input {
+  resize: vertical;
+  min-height: 80px;
+  line-height: 1.6;
+}
+
+/* Attributes */
+.attributes-section-inner {
+  grid-column: 2;
+}
+
+.attributes-grid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 0;
+}
+
+.attr-row {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.attr-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  flex: 0 0 auto;
+  width: 120px;
+}
+
+.attr-name {
+  font-family: var(--font-heading);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--text-bright);
+  text-transform: uppercase;
+}
+
+.attr-action {
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-style: italic;
+  color: var(--text-dim);
+  text-align: center;
+  line-height: 1.2;
+}
+
+.attr-value-wrap {
+  position: relative;
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Diamond shape for Vontade, Fortitude, Reflexos */
+.attr-diamond .attr-value-wrap::before {
+  content: '';
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border: 2px solid var(--gold-dim);
+  transform: rotate(45deg);
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.attr-diamond:hover .attr-value-wrap::before {
+  border-color: var(--gold);
+  box-shadow: 0 0 15px rgba(201,168,76,0.2);
+}
+
+/* Circle shape for others */
+.attr-circle .attr-value-wrap::before {
+  content: '';
+  position: absolute;
+  width: 46px;
+  height: 46px;
+  border: 2px solid var(--text-dim);
+  border-radius: 50%;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.attr-circle:hover .attr-value-wrap::before {
+  border-color: var(--gold-dim);
+  box-shadow: 0 0 15px rgba(201,168,76,0.15);
+}
+
+/* Alma special - double circle */
+.attr-alma .attr-value-wrap::before {
+  content: '';
+  position: absolute;
+  width: 46px;
+  height: 46px;
+  border: 2px solid var(--gold-dim);
+  border-radius: 50%;
+}
+.attr-alma .attr-value-wrap::after {
+  content: '';
+  position: absolute;
+  width: 38px;
+  height: 38px;
+  border: 1px solid var(--gold-dim);
+  border-radius: 50%;
+  opacity: 0.5;
+}
+
+.attr-input {
+  width: 36px;
+  height: 36px;
+  background: transparent;
+  border: none;
+  color: var(--gold-bright);
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-align: center;
+  outline: none;
+  position: relative;
+  z-index: 1;
+  -moz-appearance: textfield;
+}
+
+.attr-input::-webkit-outer-spin-button,
+.attr-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Passive / Active labels */
+.attr-type-label {
+  font-family: var(--font-heading);
+  font-size: 0.55rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  opacity: 0.5;
+  margin: 4px 0;
+}
+
+/* Stability section */
+.stability-section {
+  grid-column: 3;
+  grid-row: 2 / span 2;
+}
+
+.stability-track {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.stability-level {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 10px;
+  cursor: pointer;
+  transition: background 0.2s;
+  border-left: 2px solid transparent;
+}
+
+.stability-level:hover {
+  background: rgba(201,168,76,0.03);
+}
+
+.stability-level.active {
+  border-left-color: var(--gold);
+  background: rgba(201,168,76,0.05);
+}
+
+.stability-checkbox {
+  width: 14px;
+  height: 14px;
+  border: 1px solid var(--text-dim);
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transform: rotate(45deg);
+  transition: all 0.2s;
+}
+
+.stability-level.active .stability-checkbox {
+  border-color: var(--gold);
+  background: var(--gold);
+  box-shadow: 0 0 8px rgba(201,168,76,0.4);
+}
+
+.stability-label {
+  font-family: var(--font-heading);
+  font-size: 0.78rem;
+  letter-spacing: 1px;
+  color: var(--text-dim);
+  flex: 1;
+}
+
+.stability-level.active .stability-label {
+  color: var(--gold);
+}
+
+.stress-divider {
+  padding: 8px 10px 4px;
+  font-family: var(--font-heading);
+  font-size: 0.58rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--red);
+  font-weight: 700;
+}
+
+.stress-effect {
+  padding: 0 10px 4px;
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-style: italic;
+  color: var(--text-dim);
+  line-height: 1.4;
+}
+
+/* Wounds section */
+.wounds-section {
+  grid-column: 1;
+}
+
+.wound-category {
+  margin-bottom: 16px;
+}
+
+.wound-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.wound-title {
+  font-family: var(--font-heading);
+  font-size: 0.68rem;
+  letter-spacing: 1px;
+  color: var(--red-bright);
+  text-transform: uppercase;
+}
+
+.wound-penalty {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-style: italic;
+  color: var(--text-dim);
+}
+
+.wound-slots {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.wound-slot {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.wound-check {
+  width: 16px;
+  height: 16px;
+  border: 1px solid var(--border);
+  background: transparent;
+  cursor: pointer;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.wound-check.checked {
+  border-color: var(--red);
+  background: var(--red);
+  box-shadow: 0 0 6px rgba(192,57,43,0.3);
+}
+
+.wound-check::after {
+  content: '✕';
+  font-size: 0.6rem;
+  color: transparent;
+  transition: color 0.2s;
+}
+
+.wound-check.checked::after {
+  color: var(--text-bright);
+}
+
+.wound-desc-input {
+  flex: 1;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--font-input);
+  font-size: 0.85rem;
+  padding: 5px 8px;
+  outline: none;
+}
+
+.wound-desc-input:focus {
+  border-color: var(--gold-dim);
+}
+
+.stabilized-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+  padding-left: 26px;
+}
+
+.stabilized-label {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-style: italic;
+  color: var(--text-dim);
+}
+
+/* Grid positions */
+.info-section { grid-column: 1; grid-row: 1; }
+.relations-section { grid-column: 1; grid-row: 2; }
+.secrets-section { grid-column: 1; grid-row: 3; }
+.hooks-section { grid-column: 1; grid-row: 4; }
+.wounds-section-pos { grid-column: 1; grid-row: 5; }
+
+.attributes-section { grid-column: 2; grid-row: 1 / span 3; }
+.equipment-section { grid-column: 2; grid-row: 4; }
+.observations-section { grid-column: 2; grid-row: 5; }
+
+.advantages-section { grid-column: 3; grid-row: 1; }
+.disadvantages-section { grid-column: 3; grid-row: 2; }
+.stability-section-pos { grid-column: 3; grid-row: 3 / span 3; }
+
+/* Separator ornament */
+.ornament {
+  text-align: center;
+  color: var(--gold-dim);
+  font-size: 0.6rem;
+  letter-spacing: 8px;
+  padding: 4px 0;
+  opacity: 0.4;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 30px 20px;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  font-style: italic;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.section {
+  animation: fadeIn 0.6s ease forwards;
+  opacity: 0;
+}
+
+.section:nth-child(1) { animation-delay: 0.05s; }
+.section:nth-child(2) { animation-delay: 0.1s; }
+.section:nth-child(3) { animation-delay: 0.15s; }
+.section:nth-child(4) { animation-delay: 0.2s; }
+.section:nth-child(5) { animation-delay: 0.25s; }
+.section:nth-child(6) { animation-delay: 0.3s; }
+.section:nth-child(7) { animation-delay: 0.35s; }
+.section:nth-child(8) { animation-delay: 0.4s; }
+.section:nth-child(9) { animation-delay: 0.45s; }
+.section:nth-child(10) { animation-delay: 0.5s; }
+.section:nth-child(11) { animation-delay: 0.55s; }
+
+/* Toast notification */
+.toast {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: var(--bg-card);
+  border: 1px solid var(--gold-dim);
+  color: var(--gold);
+  font-family: var(--font-heading);
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 12px 28px;
+  z-index: 10000;
+  opacity: 0;
+  transition: all 0.4s ease;
+  pointer-events: none;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Modal for confirm */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.8);
+  z-index: 10000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-overlay.show { display: flex; }
+
+.modal {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: 30px 40px;
+  text-align: center;
+  max-width: 400px;
+}
+
+.modal h3 {
+  font-family: var(--font-heading);
+  font-size: 0.8rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 16px;
+}
+
+.modal p {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--text-dim);
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.modal-buttons button {
+  font-family: var(--font-heading);
+  font-size: 0.65rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 8px 24px;
+  border: 1px solid var(--border);
+  background: var(--bg-input);
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.modal-buttons button:hover {
+  border-color: var(--gold-dim);
+  color: var(--gold);
+}
+
+.modal-buttons button.confirm-danger {
+  border-color: var(--red);
+  color: var(--red-bright);
+}
+
+.modal-buttons button.confirm-danger:hover {
+  background: rgba(192,57,43,0.1);
+}
+
+/* Hidden file input */
+#importInput { display: none; }
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .sheet {
+    grid-template-columns: 1fr 1fr;
+  }
+  .attributes-section,
+  .info-section, .relations-section, .secrets-section, .hooks-section,
+  .advantages-section, .disadvantages-section, .equipment-section,
+  .wounds-section-pos, .observations-section, .stability-section-pos {
+    grid-column: auto !important; grid-row: auto !important;
+  }
+  .attributes-section { grid-column: 1 / -1 !important; }
+}
+
+@media (max-width: 640px) {
+  .sheet {
+    grid-template-columns: 1fr;
+  }
+  .attr-row { flex-wrap: wrap; }
+  .header h1 { letter-spacing: 4px; }
+}
+
+/* Pentagram decorative line between attrs */
+.attr-connector {
+  width: 1px;
+  height: 12px;
+  background: linear-gradient(to bottom, var(--gold-dim), transparent);
+  margin: 0 auto;
+}
+
+.attr-hline {
+  width: 40px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>KULT</h1>
+  <div class="subtitle">Divindade Perdida — Ficha de Personagem</div>
+</div>
+
+<div class="toolbar">
+  <button onclick="exportJSON()">◇ Exportar JSON</button>
+  <button onclick="document.getElementById('importInput').click()">◇ Importar JSON</button>
+  <button class="danger" onclick="showClearModal()">◇ Limpar Ficha</button>
+  <input type="file" id="importInput" accept=".json" onchange="importJSON(event)">
+</div>
+
+<div class="sheet" id="sheet">
+
+  <!-- INFO -->
+  <div class="section info-section">
+    <div class="section-title">Informações</div>
+    <div class="field-group">
+      <label class="field-label">Nome</label>
+      <input class="field-input" type="text" data-key="nome" placeholder="Nome do personagem...">
+    </div>
+    <div class="field-group">
+      <label class="field-label">Arquétipo</label>
+      <input class="field-input" type="text" data-key="arquetipo" placeholder="Arquétipo...">
+    </div>
+    <div class="field-group">
+      <label class="field-label">Ocupação</label>
+      <input class="field-input" type="text" data-key="ocupacao" placeholder="Ocupação...">
+    </div>
+    <div class="field-group">
+      <label class="field-label">Aparência</label>
+      <textarea class="field-input" data-key="aparencia" rows="2" placeholder="Descreva a aparência..."></textarea>
+    </div>
+  </div>
+
+  <!-- ATTRIBUTES -->
+  <div class="section attributes-section">
+    <div class="section-title">Atributos</div>
+    <div class="attributes-grid">
+
+      <!-- Passivos top -->
+      <div class="attr-type-label">— Passivos —</div>
+
+      <div class="attr-row">
+        <div class="attr-item attr-diamond" title="Vontade — Manter o Controle">
+          <div class="attr-name">Vontade</div>
+          <div class="attr-value-wrap">
+            <input class="attr-input" type="number" data-key="attr_vontade" min="-3" max="5" value="0">
+          </div>
+          <div class="attr-action">Manter o Controle</div>
+        </div>
+      </div>
+
+      <div class="attr-row">
+        <div class="attr-item attr-diamond" title="Fortitude — Suportar Lesão">
+          <div class="attr-name">Fortitude</div>
+          <div class="attr-value-wrap">
+            <input class="attr-input" type="number" data-key="attr_fortitude" min="-3" max="5" value="0">
+          </div>
+          <div class="attr-action">Suportar Lesão</div>
+        </div>
+        <div class="attr-hline"></div>
+        <div class="attr-item attr-diamond" title="Reflexos — Evitar Dano">
+          <div class="attr-name">Reflexos</div>
+          <div class="attr-value-wrap">
+            <input class="attr-input" type="number" data-key="attr_reflexos" min="-3" max="5" value="0">
+          </div>
+          <div class="attr-action">Evitar Dano</div>
+        </div>
+      </div>
+
+      <div class="ornament">· · ·</div>
+      <div class="attr-type-label">— Ativos —</div>
+
+      <div class="attr-row">
+        <div class="attr-item attr-circle" title="Razão — Investigar">
+          <div class="attr-name">Razão</div>
+          <div class="attr-value-wrap">
+            <input class="attr-input" type="number" data-key="attr_razao" min="-3" max="5" value="0">
+          </div>
+          <div class="attr-action">Investigar</div>
+        </div>
+        <div class="attr-hline"></div>
+        <div class="attr-item attr-circle" title="Intuição — Ler uma Pessoa">
+          <div class="attr-name">Intuição</div>
+          <div class="attr-value-wrap">
+            <input class="attr-input" type="number" data-key="attr_intuicao" min="-3" max="5" value="0">
+          </div>
+          <div class="attr-action">Ler uma Pessoa</div>
+        </div>
+      </div>
+
+      <div class="attr-row">
+        <div class="attr-item attr-circle" title="Percepção — Observar uma Situação">
+          <div class="attr-name">Percepção</div>
+          <div class="attr-value-wrap">
+            <input class="attr-input" type="number" data-key="attr_percepcao" min="-3" max="5" value="0">
+          </div>
+          <div class="attr-action">Observar uma Situação</div>
+        </div>
+      </div>
+
+      <div class="attr-row">
+        <div class="attr-item attr-circle" title="Firmeza — Agir sob Pressão">
+          <div class="attr-name">Firmeza</div>
+          <div class="attr-value-wrap">
+            <input class="attr-input" type="number" data-key="attr_firmeza" min="-3" max="5" value="0">
+          </div>
+          <div class="attr-action">Agir sob Pressão</div>
+        </div>
+        <div class="attr-hline"></div>
+        <div class="attr-item attr-circle" title="Violência — Engajar em Combate">
+          <div class="attr-name">Violência</div>
+          <div class="attr-value-wrap">
+            <input class="attr-input" type="number" data-key="attr_violencia" min="-3" max="5" value="0">
+          </div>
+          <div class="attr-action">Engajar em Combate</div>
+        </div>
+      </div>
+
+      <div class="attr-row">
+        <div class="attr-item attr-circle" title="Carisma — Influenciar Alguém">
+          <div class="attr-name">Carisma</div>
+          <div class="attr-value-wrap">
+            <input class="attr-input" type="number" data-key="attr_carisma" min="-3" max="5" value="0">
+          </div>
+          <div class="attr-action">Influenciar Alguém</div>
+        </div>
+      </div>
+
+      <div class="attr-connector"></div>
+
+      <div class="attr-row">
+        <div class="attr-item attr-alma" title="Alma — Ver Através da Ilusão">
+          <div class="attr-name">Alma</div>
+          <div class="attr-value-wrap">
+            <input class="attr-input" type="number" data-key="attr_alma" min="-3" max="5" value="0">
+          </div>
+          <div class="attr-action">Ver Através da Ilusão</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ADVANTAGES -->
+  <div class="section advantages-section">
+    <div class="section-title">Vantagens</div>
+    <textarea class="field-input" data-key="vantagens" rows="8" placeholder="Liste as vantagens do personagem..."></textarea>
+  </div>
+
+  <!-- RELATIONS -->
+  <div class="section relations-section">
+    <div class="section-title">Relações</div>
+    <textarea class="field-input" data-key="relacoes" rows="5" placeholder="Descreva as relações..."></textarea>
+  </div>
+
+  <!-- EQUIPMENT -->
+  <div class="section equipment-section">
+    <div class="section-title">Equipamentos e Armas</div>
+    <textarea class="field-input" data-key="equipamentos" rows="6" placeholder="Liste os equipamentos e armas..."></textarea>
+  </div>
+
+  <!-- DISADVANTAGES -->
+  <div class="section disadvantages-section">
+    <div class="section-title">Desvantagens</div>
+    <textarea class="field-input" data-key="desvantagens" rows="5" placeholder="Liste as desvantagens do personagem..."></textarea>
+  </div>
+
+  <!-- SECRETS -->
+  <div class="section secrets-section">
+    <div class="section-title">Segredos Sombrios</div>
+    <textarea class="field-input" data-key="segredos" rows="4" placeholder="Segredos que o personagem carrega..."></textarea>
+  </div>
+
+  <!-- OBSERVATIONS -->
+  <div class="section observations-section">
+    <div class="section-title">Observações</div>
+    <textarea class="field-input" data-key="observacoes" rows="6" placeholder="Anotações diversas..."></textarea>
+  </div>
+
+  <!-- STABILITY -->
+  <div class="section stability-section-pos">
+    <div class="section-title">Estabilidade</div>
+    <div class="stability-track" id="stabilityTrack">
+      <div class="stability-level" data-level="0" onclick="setStability(0)">
+        <div class="stability-checkbox"></div>
+        <span class="stability-label">Calmo</span>
+      </div>
+
+      <div class="stress-divider">Estresse Moderado</div>
+      <div class="stress-effect">-1 nas rolagens de Desvantagem</div>
+
+      <div class="stability-level" data-level="1" onclick="setStability(1)">
+        <div class="stability-checkbox"></div>
+        <span class="stability-label">Apreensivo</span>
+      </div>
+      <div class="stability-level" data-level="2" onclick="setStability(2)">
+        <div class="stability-checkbox"></div>
+        <span class="stability-label">Disperso</span>
+      </div>
+
+      <div class="stress-divider">Estresse Sério</div>
+      <div class="stress-effect">-1 Manter o Controle<br>-2 nas rolagens de Desvantagem</div>
+
+      <div class="stability-level" data-level="3" onclick="setStability(3)">
+        <div class="stability-checkbox"></div>
+        <span class="stability-label">Abalado</span>
+      </div>
+      <div class="stability-level" data-level="4" onclick="setStability(4)">
+        <div class="stability-checkbox"></div>
+        <span class="stability-label">Angustiado</span>
+      </div>
+      <div class="stability-level" data-level="5" onclick="setStability(5)">
+        <div class="stability-checkbox"></div>
+        <span class="stability-label">Neurótico</span>
+      </div>
+
+      <div class="stress-divider">Estresse Crítico</div>
+      <div class="stress-effect">-2 Manter o Controle<br>-3 nas rolagens de Desvantagem<br>+1 Ver Através da Ilusão</div>
+
+      <div class="stability-level" data-level="6" onclick="setStability(6)">
+        <div class="stability-checkbox"></div>
+        <span class="stability-label">Agoniado</span>
+      </div>
+      <div class="stability-level" data-level="7" onclick="setStability(7)">
+        <div class="stability-checkbox"></div>
+        <span class="stability-label">Irracional</span>
+      </div>
+      <div class="stability-level" data-level="8" onclick="setStability(8)">
+        <div class="stability-checkbox"></div>
+        <span class="stability-label">Transtornado</span>
+      </div>
+
+      <div class="stress-effect" style="color: var(--red); font-style: normal; font-weight: 600;">A MJ faz um Movimento</div>
+
+      <div class="stability-level" data-level="9" onclick="setStability(9)">
+        <div class="stability-checkbox"></div>
+        <span class="stability-label">Arruinado</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOOKS -->
+  <div class="section hooks-section">
+    <div class="section-title">Ganchos Dramáticos</div>
+    <textarea class="field-input" data-key="ganchos" rows="4" placeholder="Ganchos narrativos..."></textarea>
+  </div>
+
+  <!-- WOUNDS -->
+  <div class="section wounds-section-pos">
+    <div class="section-title">Ferimentos</div>
+
+    <div class="wound-category">
+      <div class="wound-header">
+        <span class="wound-title">Ferimentos Graves</span>
+        <span class="wound-penalty">(-1 constante)</span>
+      </div>
+      <div class="wound-slots">
+        <div class="wound-slot">
+          <div class="wound-check" data-wound="grave_0" onclick="toggleWound(this)"></div>
+          <input class="wound-desc-input" data-key="wound_grave_0" placeholder="Descrição do ferimento...">
+        </div>
+        <div class="wound-slot">
+          <div class="wound-check" data-wound="grave_1" onclick="toggleWound(this)"></div>
+          <input class="wound-desc-input" data-key="wound_grave_1" placeholder="Descrição do ferimento...">
+        </div>
+        <div class="wound-slot">
+          <div class="wound-check" data-wound="grave_2" onclick="toggleWound(this)"></div>
+          <input class="wound-desc-input" data-key="wound_grave_2" placeholder="Descrição do ferimento...">
+        </div>
+      </div>
+      <div class="stabilized-wrap">
+        <div class="wound-check" data-wound="grave_stab" onclick="toggleWound(this)"></div>
+        <span class="stabilized-label">Estabilizado</span>
+      </div>
+    </div>
+
+    <div class="wound-category">
+      <div class="wound-header">
+        <span class="wound-title">Ferimentos Críticos</span>
+        <span class="wound-penalty">(-1 constante)</span>
+      </div>
+      <div class="wound-slots">
+        <div class="wound-slot">
+          <div class="wound-check" data-wound="critico_0" onclick="toggleWound(this)"></div>
+          <input class="wound-desc-input" data-key="wound_critico_0" placeholder="Descrição do ferimento...">
+        </div>
+        <div class="wound-slot">
+          <div class="wound-check" data-wound="critico_1" onclick="toggleWound(this)"></div>
+          <input class="wound-desc-input" data-key="wound_critico_1" placeholder="Descrição do ferimento...">
+        </div>
+        <div class="wound-slot">
+          <div class="wound-check" data-wound="critico_2" onclick="toggleWound(this)"></div>
+          <input class="wound-desc-input" data-key="wound_critico_2" placeholder="Descrição do ferimento...">
+        </div>
+      </div>
+      <div class="stabilized-wrap">
+        <div class="wound-check" data-wound="critico_stab" onclick="toggleWound(this)"></div>
+        <span class="stabilized-label">Estabilizado</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  ◆ KULT: Divindade Perdida — Ficha Digital ◆
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- Clear confirm modal -->
+<div class="modal-overlay" id="clearModal">
+  <div class="modal">
+    <h3>Limpar Ficha</h3>
+    <p>Tem certeza que deseja apagar todos os dados da ficha? Esta ação não pode ser desfeita.</p>
+    <div class="modal-buttons">
+      <button onclick="hideClearModal()">Cancelar</button>
+      <button class="confirm-danger" onclick="clearSheet()">Limpar Tudo</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const STORAGE_KEY = 'kult_ficha_data';
+
+// ── Save / Load ──
+
+function gatherData() {
+  const data = {};
+
+  // Text fields
+  document.querySelectorAll('[data-key]').forEach(el => {
+    data[el.dataset.key] = el.value;
+  });
+
+  // Stability
+  data._stability = currentStability;
+
+  // Wounds
+  const wounds = {};
+  document.querySelectorAll('.wound-check').forEach(el => {
+    wounds[el.dataset.wound] = el.classList.contains('checked');
+  });
+  data._wounds = wounds;
+
+  return data;
+}
+
+function applyData(data) {
+  if (!data) return;
+
+  // Text fields
+  document.querySelectorAll('[data-key]').forEach(el => {
+    if (data[el.dataset.key] !== undefined) {
+      el.value = data[el.dataset.key];
+    }
+  });
+
+  // Stability
+  if (data._stability !== undefined) {
+    setStability(data._stability, true);
+  }
+
+  // Wounds
+  if (data._wounds) {
+    document.querySelectorAll('.wound-check').forEach(el => {
+      if (data._wounds[el.dataset.wound]) {
+        el.classList.add('checked');
+      } else {
+        el.classList.remove('checked');
+      }
+    });
+  }
+}
+
+function saveToStorage() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(gatherData()));
+  } catch(e) {}
+}
+
+function loadFromStorage() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) applyData(JSON.parse(raw));
+  } catch(e) {}
+}
+
+// ── Auto-save on any change ──
+function setupAutoSave() {
+  document.querySelectorAll('[data-key]').forEach(el => {
+    el.addEventListener('input', saveToStorage);
+  });
+}
+
+// ── Stability ──
+let currentStability = -1;
+
+function setStability(level, silent) {
+  currentStability = level;
+  document.querySelectorAll('.stability-level').forEach(el => {
+    const l = parseInt(el.dataset.level);
+    el.classList.toggle('active', l === level);
+  });
+  if (!silent) saveToStorage();
+}
+
+// ── Wounds ──
+function toggleWound(el) {
+  el.classList.toggle('checked');
+  saveToStorage();
+}
+
+// ── Export ──
+function exportJSON() {
+  const data = gatherData();
+  const name = data.nome || 'personagem';
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `kult_${name.replace(/\s+/g, '_').toLowerCase()}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('Ficha exportada com sucesso');
+}
+
+// ── Import ──
+function importJSON(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = JSON.parse(e.target.result);
+      applyData(data);
+      saveToStorage();
+      showToast('Ficha importada com sucesso');
+    } catch(err) {
+      showToast('Erro ao importar arquivo');
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+}
+
+// ── Clear ──
+function showClearModal() {
+  document.getElementById('clearModal').classList.add('show');
+}
+
+function hideClearModal() {
+  document.getElementById('clearModal').classList.remove('show');
+}
+
+function clearSheet() {
+  hideClearModal();
+  document.querySelectorAll('[data-key]').forEach(el => { el.value = ''; });
+  setStability(-1);
+  document.querySelectorAll('.wound-check').forEach(el => el.classList.remove('checked'));
+  localStorage.removeItem(STORAGE_KEY);
+  showToast('Ficha limpa');
+}
+
+// ── Toast ──
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ── Init ──
+loadFromStorage();
+setupAutoSave();
+</script>
+</body>
+</html>
