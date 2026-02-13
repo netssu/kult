@@ -1125,7 +1125,7 @@ function setupAutoSave() {
 }
 
 // ── Stability ──
-let currentStability = -1;
+let currentStability = 0;
 
 function setStability(level, silent) {
   currentStability = level;
@@ -1187,7 +1187,7 @@ function hideClearModal() {
 function clearSheet() {
   hideClearModal();
   document.querySelectorAll('[data-key]').forEach(el => { el.value = ''; });
-  setStability(-1);
+  setStability(0);
   document.querySelectorAll('.wound-check').forEach(el => el.classList.remove('checked'));
   localStorage.removeItem(STORAGE_KEY);
   showToast('Ficha limpa');
@@ -1204,6 +1204,7 @@ function showToast(msg) {
 // ── Init ──
 loadFromStorage();
 setupAutoSave();
+setStability(currentStability, true);
 </script>
 </body>
 </html>
