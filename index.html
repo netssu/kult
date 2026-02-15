@@ -530,6 +530,31 @@ textarea.field-input {
   color: var(--text-dim);
 }
 
+.wound-stab-inline {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+  margin-left: 6px;
+}
+
+.wound-check.small {
+  width: 13px;
+  height: 13px;
+}
+
+.wound-check.small::after {
+  font-size: 0.5rem;
+}
+
+.stabilized-label-sm {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-style: italic;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
 /* Grid positions */
 .info-section { grid-column: 1; grid-row: 1; }
 .relations-section { grid-column: 1; grid-row: 2; }
@@ -988,44 +1013,52 @@ textarea.field-input {
         <div class="wound-slot">
           <div class="wound-check" data-wound="grave_0" onclick="toggleWound(this)"></div>
           <input class="wound-desc-input" data-key="wound_grave_0" placeholder="Descrição do ferimento...">
+          <div class="wound-stab-inline">
+            <div class="wound-check small" data-wound="grave_0_stab" onclick="toggleWound(this)"></div>
+            <span class="stabilized-label-sm">Estab.</span>
+          </div>
         </div>
         <div class="wound-slot">
           <div class="wound-check" data-wound="grave_1" onclick="toggleWound(this)"></div>
           <input class="wound-desc-input" data-key="wound_grave_1" placeholder="Descrição do ferimento...">
+          <div class="wound-stab-inline">
+            <div class="wound-check small" data-wound="grave_1_stab" onclick="toggleWound(this)"></div>
+            <span class="stabilized-label-sm">Estab.</span>
+          </div>
         </div>
         <div class="wound-slot">
           <div class="wound-check" data-wound="grave_2" onclick="toggleWound(this)"></div>
           <input class="wound-desc-input" data-key="wound_grave_2" placeholder="Descrição do ferimento...">
+          <div class="wound-stab-inline">
+            <div class="wound-check small" data-wound="grave_2_stab" onclick="toggleWound(this)"></div>
+            <span class="stabilized-label-sm">Estab.</span>
+          </div>
         </div>
-      </div>
-      <div class="stabilized-wrap">
-        <div class="wound-check" data-wound="grave_stab" onclick="toggleWound(this)"></div>
-        <span class="stabilized-label">Estabilizado</span>
+        <div class="wound-slot">
+          <div class="wound-check" data-wound="grave_3" onclick="toggleWound(this)"></div>
+          <input class="wound-desc-input" data-key="wound_grave_3" placeholder="Descrição do ferimento...">
+          <div class="wound-stab-inline">
+            <div class="wound-check small" data-wound="grave_3_stab" onclick="toggleWound(this)"></div>
+            <span class="stabilized-label-sm">Estab.</span>
+          </div>
+        </div>
       </div>
     </div>
 
     <div class="wound-category">
       <div class="wound-header">
-        <span class="wound-title">Ferimentos Críticos</span>
+        <span class="wound-title">Ferimento Crítico</span>
         <span class="wound-penalty">(-1 constante)</span>
       </div>
       <div class="wound-slots">
         <div class="wound-slot">
           <div class="wound-check" data-wound="critico_0" onclick="toggleWound(this)"></div>
           <input class="wound-desc-input" data-key="wound_critico_0" placeholder="Descrição do ferimento...">
+          <div class="wound-stab-inline">
+            <div class="wound-check small" data-wound="critico_0_stab" onclick="toggleWound(this)"></div>
+            <span class="stabilized-label-sm">Estab.</span>
+          </div>
         </div>
-        <div class="wound-slot">
-          <div class="wound-check" data-wound="critico_1" onclick="toggleWound(this)"></div>
-          <input class="wound-desc-input" data-key="wound_critico_1" placeholder="Descrição do ferimento...">
-        </div>
-        <div class="wound-slot">
-          <div class="wound-check" data-wound="critico_2" onclick="toggleWound(this)"></div>
-          <input class="wound-desc-input" data-key="wound_critico_2" placeholder="Descrição do ferimento...">
-        </div>
-      </div>
-      <div class="stabilized-wrap">
-        <div class="wound-check" data-wound="critico_stab" onclick="toggleWound(this)"></div>
-        <span class="stabilized-label">Estabilizado</span>
       </div>
     </div>
   </div>
