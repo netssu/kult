@@ -125,13 +125,20 @@ body::before {
   background: rgba(192,57,43,0.05);
 }
 
-/* Main layout */
+/* Main layout - 3 independent columns */
 .sheet {
   max-width: 1300px;
   margin: 0 auto;
   padding: 10px 20px 60px;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
+  align-items: start;
+  gap: 16px;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
   gap: 16px;
 }
 
@@ -555,20 +562,7 @@ textarea.field-input {
   white-space: nowrap;
 }
 
-/* Grid positions */
-.info-section { grid-column: 1; grid-row: 1; }
-.relations-section { grid-column: 1; grid-row: 2; }
-.secrets-section { grid-column: 1; grid-row: 3; }
-.hooks-section { grid-column: 1; grid-row: 4; }
-.wounds-section-pos { grid-column: 1; grid-row: 5; }
-
-.attributes-section { grid-column: 2; grid-row: 1 / span 3; }
-.equipment-section { grid-column: 2; grid-row: 4; }
-.observations-section { grid-column: 2; grid-row: 5; }
-
-.advantages-section { grid-column: 3; grid-row: 1; }
-.disadvantages-section { grid-column: 3; grid-row: 2; }
-.stability-section-pos { grid-column: 3; grid-row: 3 / span 3; }
+/* Sections flow naturally inside columns */
 
 /* Separator ornament */
 .ornament {
@@ -717,13 +711,6 @@ textarea.field-input {
   .sheet {
     grid-template-columns: 1fr 1fr;
   }
-  .attributes-section,
-  .info-section, .relations-section, .secrets-section, .hooks-section,
-  .advantages-section, .disadvantages-section, .equipment-section,
-  .wounds-section-pos, .observations-section, .stability-section-pos {
-    grid-column: auto !important; grid-row: auto !important;
-  }
-  .attributes-section { grid-column: 1 / -1 !important; }
 }
 
 @media (max-width: 640px) {
@@ -765,294 +752,270 @@ textarea.field-input {
 
 <div class="sheet" id="sheet">
 
-  <!-- INFO -->
-  <div class="section info-section">
-    <div class="section-title">Informações</div>
-    <div class="field-group">
-      <label class="field-label">Nome</label>
-      <input class="field-input" type="text" data-key="nome" placeholder="Nome do personagem...">
+  <!-- LEFT COLUMN -->
+  <div class="column">
+    <div class="section">
+      <div class="section-title">Informações</div>
+      <div class="field-group">
+        <label class="field-label">Nome</label>
+        <input class="field-input" type="text" data-key="nome" placeholder="Nome do personagem...">
+      </div>
+      <div class="field-group">
+        <label class="field-label">Arquétipo</label>
+        <input class="field-input" type="text" data-key="arquetipo" placeholder="Arquétipo...">
+      </div>
+      <div class="field-group">
+        <label class="field-label">Ocupação</label>
+        <input class="field-input" type="text" data-key="ocupacao" placeholder="Ocupação...">
+      </div>
+      <div class="field-group">
+        <label class="field-label">Aparência</label>
+        <textarea class="field-input" data-key="aparencia" rows="2" placeholder="Descreva a aparência..."></textarea>
+      </div>
     </div>
-    <div class="field-group">
-      <label class="field-label">Arquétipo</label>
-      <input class="field-input" type="text" data-key="arquetipo" placeholder="Arquétipo...">
+
+    <div class="section">
+      <div class="section-title">Relações</div>
+      <textarea class="field-input" data-key="relacoes" rows="5" placeholder="Descreva as relações..."></textarea>
     </div>
-    <div class="field-group">
-      <label class="field-label">Ocupação</label>
-      <input class="field-input" type="text" data-key="ocupacao" placeholder="Ocupação...">
+
+    <div class="section">
+      <div class="section-title">Segredos Sombrios</div>
+      <textarea class="field-input" data-key="segredos" rows="4" placeholder="Segredos que o personagem carrega..."></textarea>
     </div>
-    <div class="field-group">
-      <label class="field-label">Aparência</label>
-      <textarea class="field-input" data-key="aparencia" rows="2" placeholder="Descreva a aparência..."></textarea>
+
+    <div class="section">
+      <div class="section-title">Ganchos Dramáticos</div>
+      <textarea class="field-input" data-key="ganchos" rows="4" placeholder="Ganchos narrativos..."></textarea>
     </div>
-  </div>
 
-  <!-- ATTRIBUTES -->
-  <div class="section attributes-section">
-    <div class="section-title">Atributos</div>
-    <div class="attributes-grid">
-
-      <!-- Passivos top -->
-      <div class="attr-type-label">— Passivos —</div>
-
-      <div class="attr-row">
-        <div class="attr-item attr-diamond" title="Vontade — Manter o Controle">
-          <div class="attr-name">Vontade</div>
-          <div class="attr-value-wrap">
-            <input class="attr-input" type="number" data-key="attr_vontade" min="-3" max="5" value="0">
+    <div class="section">
+      <div class="section-title">Ferimentos</div>
+      <div class="wound-category">
+        <div class="wound-header">
+          <span class="wound-title">Ferimentos Graves</span>
+          <span class="wound-penalty">(-1 constante)</span>
+        </div>
+        <div class="wound-slots">
+          <div class="wound-slot">
+            <input class="wound-desc-input" data-key="wound_grave_0" placeholder="Descrição do ferimento...">
+            <div class="wound-stab-inline">
+              <div class="wound-check small" data-wound="grave_0_stab" onclick="toggleWound(this)"></div>
+              <span class="stabilized-label-sm">Estab.</span>
+            </div>
           </div>
-          <div class="attr-action">Manter o Controle</div>
+          <div class="wound-slot">
+            <input class="wound-desc-input" data-key="wound_grave_1" placeholder="Descrição do ferimento...">
+            <div class="wound-stab-inline">
+              <div class="wound-check small" data-wound="grave_1_stab" onclick="toggleWound(this)"></div>
+              <span class="stabilized-label-sm">Estab.</span>
+            </div>
+          </div>
+          <div class="wound-slot">
+            <input class="wound-desc-input" data-key="wound_grave_2" placeholder="Descrição do ferimento...">
+            <div class="wound-stab-inline">
+              <div class="wound-check small" data-wound="grave_2_stab" onclick="toggleWound(this)"></div>
+              <span class="stabilized-label-sm">Estab.</span>
+            </div>
+          </div>
+          <div class="wound-slot">
+            <input class="wound-desc-input" data-key="wound_grave_3" placeholder="Descrição do ferimento...">
+            <div class="wound-stab-inline">
+              <div class="wound-check small" data-wound="grave_3_stab" onclick="toggleWound(this)"></div>
+              <span class="stabilized-label-sm">Estab.</span>
+            </div>
+          </div>
         </div>
       </div>
-
-      <div class="attr-row">
-        <div class="attr-item attr-diamond" title="Fortitude — Suportar Lesão">
-          <div class="attr-name">Fortitude</div>
-          <div class="attr-value-wrap">
-            <input class="attr-input" type="number" data-key="attr_fortitude" min="-3" max="5" value="0">
-          </div>
-          <div class="attr-action">Suportar Lesão</div>
+      <div class="wound-category">
+        <div class="wound-header">
+          <span class="wound-title">Ferimento Crítico</span>
+          <span class="wound-penalty">(-1 constante)</span>
         </div>
-        <div class="attr-hline"></div>
-        <div class="attr-item attr-diamond" title="Reflexos — Evitar Dano">
-          <div class="attr-name">Reflexos</div>
-          <div class="attr-value-wrap">
-            <input class="attr-input" type="number" data-key="attr_reflexos" min="-3" max="5" value="0">
+        <div class="wound-slots">
+          <div class="wound-slot">
+            <input class="wound-desc-input" data-key="wound_critico_0" placeholder="Descrição do ferimento...">
+            <div class="wound-stab-inline">
+              <div class="wound-check small" data-wound="critico_0_stab" onclick="toggleWound(this)"></div>
+              <span class="stabilized-label-sm">Estab.</span>
+            </div>
           </div>
-          <div class="attr-action">Evitar Dano</div>
         </div>
-      </div>
-
-      <div class="ornament">· · ·</div>
-      <div class="attr-type-label">— Ativos —</div>
-
-      <div class="attr-row">
-        <div class="attr-item attr-circle" title="Razão — Investigar">
-          <div class="attr-name">Razão</div>
-          <div class="attr-value-wrap">
-            <input class="attr-input" type="number" data-key="attr_razao" min="-3" max="5" value="0">
-          </div>
-          <div class="attr-action">Investigar</div>
-        </div>
-        <div class="attr-hline"></div>
-        <div class="attr-item attr-circle" title="Intuição — Ler uma Pessoa">
-          <div class="attr-name">Intuição</div>
-          <div class="attr-value-wrap">
-            <input class="attr-input" type="number" data-key="attr_intuicao" min="-3" max="5" value="0">
-          </div>
-          <div class="attr-action">Ler uma Pessoa</div>
-        </div>
-      </div>
-
-      <div class="attr-row">
-        <div class="attr-item attr-circle" title="Percepção — Observar uma Situação">
-          <div class="attr-name">Percepção</div>
-          <div class="attr-value-wrap">
-            <input class="attr-input" type="number" data-key="attr_percepcao" min="-3" max="5" value="0">
-          </div>
-          <div class="attr-action">Observar uma Situação</div>
-        </div>
-      </div>
-
-      <div class="attr-row">
-        <div class="attr-item attr-circle" title="Firmeza — Agir sob Pressão">
-          <div class="attr-name">Firmeza</div>
-          <div class="attr-value-wrap">
-            <input class="attr-input" type="number" data-key="attr_firmeza" min="-3" max="5" value="0">
-          </div>
-          <div class="attr-action">Agir sob Pressão</div>
-        </div>
-        <div class="attr-hline"></div>
-        <div class="attr-item attr-circle" title="Violência — Engajar em Combate">
-          <div class="attr-name">Violência</div>
-          <div class="attr-value-wrap">
-            <input class="attr-input" type="number" data-key="attr_violencia" min="-3" max="5" value="0">
-          </div>
-          <div class="attr-action">Engajar em Combate</div>
-        </div>
-      </div>
-
-      <div class="attr-row">
-        <div class="attr-item attr-circle" title="Carisma — Influenciar Alguém">
-          <div class="attr-name">Carisma</div>
-          <div class="attr-value-wrap">
-            <input class="attr-input" type="number" data-key="attr_carisma" min="-3" max="5" value="0">
-          </div>
-          <div class="attr-action">Influenciar Alguém</div>
-        </div>
-      </div>
-
-      <div class="attr-connector"></div>
-
-      <div class="attr-row">
-        <div class="attr-item attr-alma" title="Alma — Ver Através da Ilusão">
-          <div class="attr-name">Alma</div>
-          <div class="attr-value-wrap">
-            <input class="attr-input" type="number" data-key="attr_alma" min="-3" max="5" value="0">
-          </div>
-          <div class="attr-action">Ver Através da Ilusão</div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- ADVANTAGES -->
-  <div class="section advantages-section">
-    <div class="section-title">Vantagens</div>
-    <textarea class="field-input" data-key="vantagens" rows="8" placeholder="Liste as vantagens do personagem..."></textarea>
-  </div>
-
-  <!-- RELATIONS -->
-  <div class="section relations-section">
-    <div class="section-title">Relações</div>
-    <textarea class="field-input" data-key="relacoes" rows="5" placeholder="Descreva as relações..."></textarea>
-  </div>
-
-  <!-- EQUIPMENT -->
-  <div class="section equipment-section">
-    <div class="section-title">Equipamentos e Armas</div>
-    <textarea class="field-input" data-key="equipamentos" rows="6" placeholder="Liste os equipamentos e armas..."></textarea>
-  </div>
-
-  <!-- DISADVANTAGES -->
-  <div class="section disadvantages-section">
-    <div class="section-title">Desvantagens</div>
-    <textarea class="field-input" data-key="desvantagens" rows="5" placeholder="Liste as desvantagens do personagem..."></textarea>
-  </div>
-
-  <!-- SECRETS -->
-  <div class="section secrets-section">
-    <div class="section-title">Segredos Sombrios</div>
-    <textarea class="field-input" data-key="segredos" rows="4" placeholder="Segredos que o personagem carrega..."></textarea>
-  </div>
-
-  <!-- OBSERVATIONS -->
-  <div class="section observations-section">
-    <div class="section-title">Observações</div>
-    <textarea class="field-input" data-key="observacoes" rows="6" placeholder="Anotações diversas..."></textarea>
-  </div>
-
-  <!-- STABILITY -->
-  <div class="section stability-section-pos">
-    <div class="section-title">Estabilidade</div>
-    <div class="stability-track" id="stabilityTrack">
-      <div class="stability-level" data-level="0" onclick="setStability(0)">
-        <div class="stability-checkbox"></div>
-        <span class="stability-label">Calmo</span>
-      </div>
-
-      <div class="stress-divider">Estresse Moderado</div>
-      <div class="stress-effect">-1 nas rolagens de Desvantagem</div>
-
-      <div class="stability-level" data-level="1" onclick="setStability(1)">
-        <div class="stability-checkbox"></div>
-        <span class="stability-label">Apreensivo</span>
-      </div>
-      <div class="stability-level" data-level="2" onclick="setStability(2)">
-        <div class="stability-checkbox"></div>
-        <span class="stability-label">Disperso</span>
-      </div>
-
-      <div class="stress-divider">Estresse Sério</div>
-      <div class="stress-effect">-1 Manter o Controle<br>-2 nas rolagens de Desvantagem</div>
-
-      <div class="stability-level" data-level="3" onclick="setStability(3)">
-        <div class="stability-checkbox"></div>
-        <span class="stability-label">Abalado</span>
-      </div>
-      <div class="stability-level" data-level="4" onclick="setStability(4)">
-        <div class="stability-checkbox"></div>
-        <span class="stability-label">Angustiado</span>
-      </div>
-      <div class="stability-level" data-level="5" onclick="setStability(5)">
-        <div class="stability-checkbox"></div>
-        <span class="stability-label">Neurótico</span>
-      </div>
-
-      <div class="stress-divider">Estresse Crítico</div>
-      <div class="stress-effect">-2 Manter o Controle<br>-3 nas rolagens de Desvantagem<br>+1 Ver Através da Ilusão</div>
-
-      <div class="stability-level" data-level="6" onclick="setStability(6)">
-        <div class="stability-checkbox"></div>
-        <span class="stability-label">Agoniado</span>
-      </div>
-      <div class="stability-level" data-level="7" onclick="setStability(7)">
-        <div class="stability-checkbox"></div>
-        <span class="stability-label">Irracional</span>
-      </div>
-      <div class="stability-level" data-level="8" onclick="setStability(8)">
-        <div class="stability-checkbox"></div>
-        <span class="stability-label">Transtornado</span>
-      </div>
-
-      <div class="stress-effect" style="color: var(--red); font-style: normal; font-weight: 600;">A MJ faz um Movimento</div>
-
-      <div class="stability-level" data-level="9" onclick="setStability(9)">
-        <div class="stability-checkbox"></div>
-        <span class="stability-label">Arruinado</span>
       </div>
     </div>
   </div>
 
-  <!-- HOOKS -->
-  <div class="section hooks-section">
-    <div class="section-title">Ganchos Dramáticos</div>
-    <textarea class="field-input" data-key="ganchos" rows="4" placeholder="Ganchos narrativos..."></textarea>
-  </div>
-
-  <!-- WOUNDS -->
-  <div class="section wounds-section-pos">
-    <div class="section-title">Ferimentos</div>
-
-    <div class="wound-category">
-      <div class="wound-header">
-        <span class="wound-title">Ferimentos Graves</span>
-        <span class="wound-penalty">(-1 constante)</span>
-      </div>
-      <div class="wound-slots">
-        <div class="wound-slot">
-          <input class="wound-desc-input" data-key="wound_grave_0" placeholder="Descrição do ferimento...">
-          <div class="wound-stab-inline">
-            <div class="wound-check small" data-wound="grave_0_stab" onclick="toggleWound(this)"></div>
-            <span class="stabilized-label-sm">Estab.</span>
+  <!-- CENTER COLUMN -->
+  <div class="column">
+    <div class="section attributes-section">
+      <div class="section-title">Atributos</div>
+      <div class="attributes-grid">
+        <div class="attr-type-label">— Passivos —</div>
+        <div class="attr-row">
+          <div class="attr-item attr-diamond" title="Vontade — Manter o Controle">
+            <div class="attr-name">Vontade</div>
+            <div class="attr-value-wrap">
+              <input class="attr-input" type="number" data-key="attr_vontade" min="-3" max="5" value="0">
+            </div>
+            <div class="attr-action">Manter o Controle</div>
           </div>
         </div>
-        <div class="wound-slot">
-          <input class="wound-desc-input" data-key="wound_grave_1" placeholder="Descrição do ferimento...">
-          <div class="wound-stab-inline">
-            <div class="wound-check small" data-wound="grave_1_stab" onclick="toggleWound(this)"></div>
-            <span class="stabilized-label-sm">Estab.</span>
+        <div class="attr-row">
+          <div class="attr-item attr-diamond" title="Fortitude — Suportar Lesão">
+            <div class="attr-name">Fortitude</div>
+            <div class="attr-value-wrap">
+              <input class="attr-input" type="number" data-key="attr_fortitude" min="-3" max="5" value="0">
+            </div>
+            <div class="attr-action">Suportar Lesão</div>
+          </div>
+          <div class="attr-hline"></div>
+          <div class="attr-item attr-diamond" title="Reflexos — Evitar Dano">
+            <div class="attr-name">Reflexos</div>
+            <div class="attr-value-wrap">
+              <input class="attr-input" type="number" data-key="attr_reflexos" min="-3" max="5" value="0">
+            </div>
+            <div class="attr-action">Evitar Dano</div>
           </div>
         </div>
-        <div class="wound-slot">
-          <input class="wound-desc-input" data-key="wound_grave_2" placeholder="Descrição do ferimento...">
-          <div class="wound-stab-inline">
-            <div class="wound-check small" data-wound="grave_2_stab" onclick="toggleWound(this)"></div>
-            <span class="stabilized-label-sm">Estab.</span>
+        <div class="ornament">· · ·</div>
+        <div class="attr-type-label">— Ativos —</div>
+        <div class="attr-row">
+          <div class="attr-item attr-circle" title="Razão — Investigar">
+            <div class="attr-name">Razão</div>
+            <div class="attr-value-wrap">
+              <input class="attr-input" type="number" data-key="attr_razao" min="-3" max="5" value="0">
+            </div>
+            <div class="attr-action">Investigar</div>
+          </div>
+          <div class="attr-hline"></div>
+          <div class="attr-item attr-circle" title="Intuição — Ler uma Pessoa">
+            <div class="attr-name">Intuição</div>
+            <div class="attr-value-wrap">
+              <input class="attr-input" type="number" data-key="attr_intuicao" min="-3" max="5" value="0">
+            </div>
+            <div class="attr-action">Ler uma Pessoa</div>
           </div>
         </div>
-        <div class="wound-slot">
-          <input class="wound-desc-input" data-key="wound_grave_3" placeholder="Descrição do ferimento...">
-          <div class="wound-stab-inline">
-            <div class="wound-check small" data-wound="grave_3_stab" onclick="toggleWound(this)"></div>
-            <span class="stabilized-label-sm">Estab.</span>
+        <div class="attr-row">
+          <div class="attr-item attr-circle" title="Percepção — Observar uma Situação">
+            <div class="attr-name">Percepção</div>
+            <div class="attr-value-wrap">
+              <input class="attr-input" type="number" data-key="attr_percepcao" min="-3" max="5" value="0">
+            </div>
+            <div class="attr-action">Observar uma Situação</div>
+          </div>
+        </div>
+        <div class="attr-row">
+          <div class="attr-item attr-circle" title="Firmeza — Agir sob Pressão">
+            <div class="attr-name">Firmeza</div>
+            <div class="attr-value-wrap">
+              <input class="attr-input" type="number" data-key="attr_firmeza" min="-3" max="5" value="0">
+            </div>
+            <div class="attr-action">Agir sob Pressão</div>
+          </div>
+          <div class="attr-hline"></div>
+          <div class="attr-item attr-circle" title="Violência — Engajar em Combate">
+            <div class="attr-name">Violência</div>
+            <div class="attr-value-wrap">
+              <input class="attr-input" type="number" data-key="attr_violencia" min="-3" max="5" value="0">
+            </div>
+            <div class="attr-action">Engajar em Combate</div>
+          </div>
+        </div>
+        <div class="attr-row">
+          <div class="attr-item attr-circle" title="Carisma — Influenciar Alguém">
+            <div class="attr-name">Carisma</div>
+            <div class="attr-value-wrap">
+              <input class="attr-input" type="number" data-key="attr_carisma" min="-3" max="5" value="0">
+            </div>
+            <div class="attr-action">Influenciar Alguém</div>
+          </div>
+        </div>
+        <div class="attr-connector"></div>
+        <div class="attr-row">
+          <div class="attr-item attr-alma" title="Alma — Ver Através da Ilusão">
+            <div class="attr-name">Alma</div>
+            <div class="attr-value-wrap">
+              <input class="attr-input" type="number" data-key="attr_alma" min="-3" max="5" value="0">
+            </div>
+            <div class="attr-action">Ver Através da Ilusão</div>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="wound-category">
-      <div class="wound-header">
-        <span class="wound-title">Ferimento Crítico</span>
-        <span class="wound-penalty">(-1 constante)</span>
-      </div>
-      <div class="wound-slots">
-        <div class="wound-slot">
-          <input class="wound-desc-input" data-key="wound_critico_0" placeholder="Descrição do ferimento...">
-          <div class="wound-stab-inline">
-            <div class="wound-check small" data-wound="critico_0_stab" onclick="toggleWound(this)"></div>
-            <span class="stabilized-label-sm">Estab.</span>
-          </div>
+    <div class="section">
+      <div class="section-title">Equipamentos e Armas</div>
+      <textarea class="field-input" data-key="equipamentos" rows="6" placeholder="Liste os equipamentos e armas..."></textarea>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Observações</div>
+      <textarea class="field-input" data-key="observacoes" rows="6" placeholder="Anotações diversas..."></textarea>
+    </div>
+  </div>
+
+  <!-- RIGHT COLUMN -->
+  <div class="column">
+    <div class="section">
+      <div class="section-title">Vantagens</div>
+      <textarea class="field-input" data-key="vantagens" rows="8" placeholder="Liste as vantagens do personagem..."></textarea>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Desvantagens</div>
+      <textarea class="field-input" data-key="desvantagens" rows="5" placeholder="Liste as desvantagens do personagem..."></textarea>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Estabilidade</div>
+      <div class="stability-track" id="stabilityTrack">
+        <div class="stability-level" data-level="0" onclick="setStability(0)">
+          <div class="stability-checkbox"></div>
+          <span class="stability-label">Calmo</span>
+        </div>
+        <div class="stress-divider">Estresse Moderado</div>
+        <div class="stress-effect">-1 nas rolagens de Desvantagem</div>
+        <div class="stability-level" data-level="1" onclick="setStability(1)">
+          <div class="stability-checkbox"></div>
+          <span class="stability-label">Apreensivo</span>
+        </div>
+        <div class="stability-level" data-level="2" onclick="setStability(2)">
+          <div class="stability-checkbox"></div>
+          <span class="stability-label">Disperso</span>
+        </div>
+        <div class="stress-divider">Estresse Sério</div>
+        <div class="stress-effect">-1 Manter o Controle<br>-2 nas rolagens de Desvantagem</div>
+        <div class="stability-level" data-level="3" onclick="setStability(3)">
+          <div class="stability-checkbox"></div>
+          <span class="stability-label">Abalado</span>
+        </div>
+        <div class="stability-level" data-level="4" onclick="setStability(4)">
+          <div class="stability-checkbox"></div>
+          <span class="stability-label">Angustiado</span>
+        </div>
+        <div class="stability-level" data-level="5" onclick="setStability(5)">
+          <div class="stability-checkbox"></div>
+          <span class="stability-label">Neurótico</span>
+        </div>
+        <div class="stress-divider">Estresse Crítico</div>
+        <div class="stress-effect">-2 Manter o Controle<br>-3 nas rolagens de Desvantagem<br>+1 Ver Através da Ilusão</div>
+        <div class="stability-level" data-level="6" onclick="setStability(6)">
+          <div class="stability-checkbox"></div>
+          <span class="stability-label">Agoniado</span>
+        </div>
+        <div class="stability-level" data-level="7" onclick="setStability(7)">
+          <div class="stability-checkbox"></div>
+          <span class="stability-label">Irracional</span>
+        </div>
+        <div class="stability-level" data-level="8" onclick="setStability(8)">
+          <div class="stability-checkbox"></div>
+          <span class="stability-label">Transtornado</span>
+        </div>
+        <div class="stress-effect" style="color: var(--red); font-style: normal; font-weight: 600;">A MJ faz um Movimento</div>
+        <div class="stability-level" data-level="9" onclick="setStability(9)">
+          <div class="stability-checkbox"></div>
+          <span class="stability-label">Arruinado</span>
         </div>
       </div>
     </div>
