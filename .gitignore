@@ -1,0 +1,13 @@
+# Arquivos locais de verificacao gerados durante testes
+verification-*.png
+
+# Artefatos comuns do sistema/editor
+Thumbs.db
+.DS_Store
+.vscode/
+.idea/
+
+# Dependencias/builds caso voce teste ferramentas locais no futuro
+node_modules/
+dist/
+build/
