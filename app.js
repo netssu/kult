@@ -45,6 +45,8 @@ const defaultState = {
   },
   derived: {
     pace: 6,
+    parryOverride: null,
+    toughnessOverride: null,
     armor: 0,
     shield: 0,
     runningDie: "d6",
@@ -325,6 +327,13 @@ function bindEvents() {
       return;
     }
 
+    if (target.matches("[data-derived-override]")) {
+      updateDerivedOverride(target);
+      scheduleSave();
+      if (target.value !== "") updateDerived();
+      return;
+    }
+
     if (target.matches("[data-list]")) {
       updateListValue(target);
       scheduleSave();
@@ -340,6 +349,14 @@ function bindEvents() {
       setPath(state, target.dataset.bind, readFieldValue(target));
       scheduleSave();
       updateDerived();
+      return;
+    }
+
+    if (target.matches("[data-derived-override]")) {
+      updateDerivedOverride(target);
+      scheduleSave();
+      updateDerived();
+      return;
     }
 
     if (target.matches("[data-list]")) {
@@ -421,6 +438,11 @@ function updateListValue(target) {
   state[list][index][field] = target.value;
 }
 
+function updateDerivedOverride(target) {
+  const field = target.dataset.derivedOverride;
+  state.derived[field] = target.value === "" ? null : Number(target.value);
+}
+
 function readFieldValue(field) {
   if (field.type === "checkbox") return field.checked;
   if (field.type === "number") return Number(field.value || 0);
@@ -444,11 +466,13 @@ function removeRow(list, index) {
 
 function updateDerived() {
   const fighting = state.skills.find((skill) => normalize(skill.name) === "lutar")?.die || "d4";
-  const parry = 2 + halfDie(fighting) + Number(state.derived.shield || 0);
-  const toughness = 2 + halfDie(state.attributes.vigor) + Number(state.derived.armor || 0);
+  const automaticParry = 2 + halfDie(fighting) + Number(state.derived.shield || 0);
+  const automaticToughness = 2 + halfDie(state.attributes.vigor) + Number(state.derived.armor || 0);
+  const parry = state.derived.parryOverride ?? automaticParry;
+  const toughness = state.derived.toughnessOverride ?? automaticToughness;
 
-  document.querySelector("#parryValue").textContent = parry;
-  document.querySelector("#toughnessValue").textContent = toughness;
+  document.querySelector("#parryValue").value = parry;
+  document.querySelector("#toughnessValue").value = toughness;
 }
 
 function halfDie(die) {

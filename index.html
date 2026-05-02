@@ -142,14 +142,14 @@
                   <span>Movimento</span>
                   <input data-bind="derived.pace" type="number" min="0" />
                 </label>
-                <div class="stat-card calculated">
+                <label class="stat-card calculated">
                   <span>Aparar</span>
-                  <strong id="parryValue">2</strong>
-                </div>
-                <div class="stat-card calculated">
+                  <input id="parryValue" data-derived-override="parryOverride" type="number" min="0" step="1" aria-label="Aparar" />
+                </label>
+                <label class="stat-card calculated">
                   <span>Resistencia</span>
-                  <strong id="toughnessValue">2</strong>
-                </div>
+                  <input id="toughnessValue" data-derived-override="toughnessOverride" type="number" min="0" step="1" aria-label="Resistencia" />
+                </label>
                 <label class="compact-field">
                   <span>Armadura</span>
                   <input data-bind="derived.armor" type="number" min="0" />
